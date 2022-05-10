@@ -1,0 +1,15 @@
+<zk xmlns:c="client/attribute" xmlns:n="native">
+    <n:div style="margin:1em 1em">
+        Input your URL:
+        <textbox style="display:block" onChange="coder.setValue(self.getValue())"/>
+        <barcode id="coder" type="qr" height="100px" style="cursor:pointer; display:block"/>
+        Click QR code to download
+        <a sclass="download" c:download="myqrcode.png"/>
+    </n:div>
+    <script defer="true" src="download_barcode_image.js"/>
+    <style>
+        * {
+            margin: 1em 0;
+        }
+    </style>
+</zk>
