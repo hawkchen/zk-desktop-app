@@ -7,16 +7,21 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.*;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 
 import java.io.*;
 import java.net.URL;
+import java.nio.file.*;
+import java.util.Base64;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
 
 
 /**
  * https://docs.oracle.com/javase/8/javafx/get-started-tutorial/hello_world.htm
  */
 public class MyWebView extends Application {
+    final String PNG_DATA_URL_PREFIX = "data:image/png;base64,";
 
     public static void main(String[] args) throws InterruptedException {
         startWebApp();
@@ -47,7 +52,7 @@ public class MyWebView extends Application {
     @Override
     public void start(Stage primaryStage) {
         WebView webView = new WebView();
-
+        webView.setContextMenuEnabled(true);
         // Create the WebEngine
         final WebEngine webEngine = webView.getEngine();
         System.out.println(webView.getEngine().getUserAgent());
@@ -61,16 +66,19 @@ public class MyWebView extends Application {
             }
         });
 
-        webEngine.locationProperty().addListener((observableValue, oldLoc, newLoc) -> {
-            if (isImage(newLoc)) {
-                try (BufferedInputStream is = new BufferedInputStream(new URL(newLoc).openStream());
-                     BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream("qrcode.png"));) {
-                    bufferedOutputStream.write(is.readAllBytes());
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+        webEngine.getLoadWorker().stateProperty().addListener(
+                new ChangeListener() {
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                        if (newValue != Worker.State.SUCCEEDED) {
+                            return;
+                        }
+
+                        JSObject window = (JSObject) webEngine.executeScript("window");
+                        window.setMember("imageSaver", new ImageSaver());
+                    }
                 }
-            }
-        });
+        );
 
         webEngine.load("http://localhost:8080");
         StackPane root = new StackPane();
@@ -80,12 +88,12 @@ public class MyWebView extends Application {
         Scene scene = new Scene(root, 300, 250);
 
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
+//        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
-    private boolean isImage(String newLoc) {
-        return newLoc.startsWith("data:image/octet-stream");
+    private boolean isPngImage(String newLoc) {
+        return newLoc.startsWith(PNG_DATA_URL_PREFIX);
     }
 
     @Override
