@@ -22,6 +22,7 @@ import java.util.function.Consumer;
  */
 public class MyWebView extends Application {
     final String PNG_DATA_URL_PREFIX = "data:image/png;base64,";
+    private WebView webView;
 
     public static void main(String[] args) throws InterruptedException {
         startWebApp();
@@ -51,7 +52,7 @@ public class MyWebView extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        WebView webView = new WebView();
+        webView = new WebView();
         webView.setContextMenuEnabled(true);
         // Create the WebEngine
         final WebEngine webEngine = webView.getEngine();
@@ -66,6 +67,8 @@ public class MyWebView extends Application {
             }
         });
 
+        ImageSaver imageSaver = new ImageSaver(this::showMessage);
+
         webEngine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener() {
                     @Override
@@ -75,7 +78,7 @@ public class MyWebView extends Application {
                         }
 
                         JSObject window = (JSObject) webEngine.executeScript("window");
-                        window.setMember("imageSaver", new ImageSaver());
+                        window.setMember("imageSaver", imageSaver);
                     }
                 }
         );
@@ -85,15 +88,14 @@ public class MyWebView extends Application {
         root.setStyle("width:100%;" + "height:100%;");
         root.getChildren().add(webView);
 
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 400, 300);
 
         primaryStage.setScene(scene);
-//        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 
-    private boolean isPngImage(String newLoc) {
-        return newLoc.startsWith(PNG_DATA_URL_PREFIX);
+    private void showMessage(String msg){
+        webView.getEngine().executeScript("zAu.cmd0.showNotification('" + msg +"', 'info', null, null,null, null, 500)");
     }
 
     @Override
