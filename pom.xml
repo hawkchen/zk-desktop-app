@@ -61,7 +61,6 @@
                             <mainClass>org.zkoss.MyWebView</mainClass>
                             <options>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y</option>
-<!--                                ,address=*:8080-->
                             </options>
                         </configuration>
                     </execution>

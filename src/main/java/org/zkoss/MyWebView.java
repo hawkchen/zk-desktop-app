@@ -56,7 +56,7 @@ public class MyWebView extends Application {
         webView.setContextMenuEnabled(true);
         // Create the WebEngine
         final WebEngine webEngine = webView.getEngine();
-        System.out.println(webView.getEngine().getUserAgent());
+        System.out.println(webView.getEngine().getUserAgent()); //show built-in webkit version
         // Load the Start-Page
         webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
             public void changed(ObservableValue<? extends Worker.State> ov, Worker.State oldState, Worker.State newState) {
@@ -76,7 +76,6 @@ public class MyWebView extends Application {
                         if (newValue != Worker.State.SUCCEEDED) {
                             return;
                         }
-
                         JSObject window = (JSObject) webEngine.executeScript("window");
                         window.setMember("imageSaver", imageSaver);
                     }
