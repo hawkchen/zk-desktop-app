@@ -14,6 +14,6 @@ public class MyWebApp {
 
     @EventListener(ApplicationReadyEvent.class)
     public void ready() {
-        MyWebView.notifyStart();
+        MyFxApp.notifyStart();
     }
 }

@@ -9,18 +9,13 @@ import javafx.scene.web.*;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.file.*;
-import java.util.Base64;
 import java.util.concurrent.*;
-import java.util.function.Consumer;
 
 
 /**
  * https://docs.oracle.com/javase/8/javafx/get-started-tutorial/hello_world.htm
  */
-public class MyWebView extends Application {
+public class MyFxApp extends Application {
     final String PNG_DATA_URL_PREFIX = "data:image/png;base64,";
     private WebView webView;
 
