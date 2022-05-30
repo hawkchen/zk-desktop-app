@@ -5,7 +5,7 @@
         Input your URL:
         <textbox style="display:block" onChanging="coder.setValue(event.getValue())" value="https://www.zkoss.org" width="100%"/>
         <barcode id="coder" type="qr" height="100px" style="cursor:pointer;" sclass="d-block center" />
-        <button label="Click to download" sclass="d-block center"/>
+        <button label="Click to Save" sclass="d-block center"/>
     </vlayout>
     <script defer="true" src="download_barcode_image.js"/>
 </zk>
