@@ -16,34 +16,33 @@ import java.util.concurrent.*;
  * https://docs.oracle.com/javase/8/javafx/get-started-tutorial/hello_world.htm
  */
 public class MyFxApp extends Application {
-    final String PNG_DATA_URL_PREFIX = "data:image/png;base64,";
     private WebView webView;
 
     public static void main(String[] args) throws InterruptedException {
-        startWebApp();
-        while (!started) {
-            Thread.sleep(300);
+        MyFxApp myFxApp = new MyFxApp();
+        myFxApp.startWebApp();
+        myFxApp.startApp(args);
+    }
+    private void startApp(String[] args) throws InterruptedException {
+        synchronized (this) {
+            wait();
+            launch(args);
         }
-        launch(args);
     }
 
-    private static void startWebApp() {
+    private void startWebApp() {
         ExecutorService exec = Executors.newFixedThreadPool(1);
         Runnable webAppThread = new Runnable() {
             @Override
             public void run() {
-                MyWebApp.main(new String[0]);
+                synchronized (MyFxApp.this) {
+                    MyWebApp.main(new String[0]);
+                    MyFxApp.this.notify();
+                }
             }
         };
         exec.execute(webAppThread);
     }
-
-    private static boolean started = false;
-
-    public static void notifyStart() {
-        started = true;
-    }
-
 
     @Override
     public void start(Stage primaryStage) {

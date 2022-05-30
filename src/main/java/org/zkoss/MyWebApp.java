@@ -11,9 +11,4 @@ public class MyWebApp {
     public static void main(String[] args) {
         SpringApplication.run(MyWebApp.class, args);
     }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void ready() {
-        MyFxApp.notifyStart();
-    }
 }
