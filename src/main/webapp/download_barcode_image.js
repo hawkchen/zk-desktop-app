@@ -1,4 +1,4 @@
-jq('.z-button').on('click', function(){
+jq('.z-button, .z-barcode').on('click', function(){
     window.imageSaver.save(getPngDataUrl());
 });
 

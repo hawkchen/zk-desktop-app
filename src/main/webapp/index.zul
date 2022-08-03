@@ -1,6 +1,6 @@
 <?page title="QR Code Generator"?>
 <?link  rel="stylesheet" type="text/css" href="index.css"?>
-<zk xmlns:c="client/attribute" xmlns:n="native">
+<zk>
     <vlayout style="padding:1em 1em">
         Input your URL:
         <textbox style="display:block" onChanging="coder.setValue(event.getValue())" value="https://www.zkoss.org" width="100%"/>
